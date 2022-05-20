@@ -1,0 +1,5 @@
+# Node modules
+.idea
+package-lock.json
+data/*/cells
+.DS_Store
