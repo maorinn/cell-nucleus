@@ -1,3 +1,4 @@
+#coding :UTF-8
 '''
 utility functions assisting nuclei detection and segmentation
 @author: Kemeng Chen
@@ -22,7 +23,7 @@ def print_ctime():
 def batch2list(batch):
 	mask_list=list()
 	for index in range(batch.shape[0]):
-		mask_list.append(batch[index,:,:])
+		mask_list.append(batch[index,:])
 	return mask_list
 
 def patch2image(patch_list, patch_size, stride, shape):	
@@ -180,7 +181,7 @@ def center_edge(mask, image):
 	comb_mask=np.clip(comb_mask, a_min=0, a_max=1)
 	check_image=np.copy(image)
 	comb_mask*=255
-	check_image[:,:,1]=np.maximum(check_image[:,:,1], comb_mask)
+	check_image[:,:]=np.maximum(check_image[:,:], comb_mask)
 	return check_image.astype(np.uint8), comb_mask.astype(np.uint8)
 
 

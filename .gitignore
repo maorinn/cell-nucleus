@@ -2,4 +2,5 @@
 .idea
 package-lock.json
 data/*/cells
+models/*.hdf5
 .DS_Store
