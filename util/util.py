@@ -36,14 +36,15 @@ def patch2image(patch_list, patch_size, stride, shape):
 	else:
 		W=math.ceil((shape[1]-patch_size)/stride)	
 
-	full_image=np.zeros([L*stride+patch_size, W*stride+patch_size])
-	bk=np.zeros([L*stride+patch_size, W*stride+patch_size])
+	full_image=np.zeros([L*stride+patch_size, W*stride+patch_size,1])
+	bk=np.zeros([L*stride+patch_size, W*stride+patch_size,1])
 	cnt=0
 	for i in range(L+1):
 		for j in range(W+1):
+			print("patch_list[cnt]",full_image.shape)
 			full_image[i*stride:i*stride+patch_size, j*stride:j*stride+patch_size]+=patch_list[cnt]
-			bk[i*stride:i*stride+patch_size, j*stride:j*stride+patch_size]+=np.ones([patch_size, patch_size])
-			cnt+=1   
+			bk[i*stride:i*stride+patch_size, j*stride:j*stride+patch_size]+=np.ones([patch_size, patch_size,1])
+			# cnt+=1   
 	full_image/=bk
 	image=full_image[0:shape[0], 0:shape[1]]
 	# cv2.namedWindow("image")     # 创建一个image的窗口
@@ -123,6 +124,10 @@ def sess_interference(sess, batch_group):
 	patch_list=list()
 	for temp_batch in batch_group:
 		mask_batch=sess.run_sess(temp_batch)[0]
+		cv2.imwrite("test.png", temp_batch[0].astype(np.uint8))
+		skimage.io.imshow(temp_batch[0])
+		skimage.io.show()
+		print("temp_batch->>",temp_batch[0].dtype)
 		mask_batch=np.squeeze(mask_batch, axis=-1)
 		mask_list=batch2list(mask_batch)
 		patch_list+=mask_list
@@ -181,7 +186,7 @@ def center_edge(mask, image):
 	comb_mask=np.clip(comb_mask, a_min=0, a_max=1)
 	check_image=np.copy(image)
 	comb_mask*=255
-	check_image[:,:]=np.maximum(check_image[:,:], comb_mask)
+	check_image[:,:,1]=np.maximum(check_image[:,:,1], comb_mask)
 	return check_image.astype(np.uint8), comb_mask.astype(np.uint8)
 
 
