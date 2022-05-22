@@ -1,4 +1,3 @@
-#coding :UTF-8
 '''
 utility functions assisting nuclei detection and segmentation
 @author: Kemeng Chen
@@ -23,7 +22,7 @@ def print_ctime():
 def batch2list(batch):
 	mask_list=list()
 	for index in range(batch.shape[0]):
-		mask_list.append(batch[index,:])
+		mask_list.append(batch[index,:,:])
 	return mask_list
 
 def patch2image(patch_list, patch_size, stride, shape):	

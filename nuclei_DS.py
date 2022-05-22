@@ -1,4 +1,3 @@
-#encoding:utf-8
 '''
 detect and segement potential nuclei in miscropic images (H&E stained)
 @author: Kemeng Chen 

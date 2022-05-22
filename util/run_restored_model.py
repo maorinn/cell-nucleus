@@ -22,7 +22,6 @@ class restored_model(object):
 		# print("patches->>",patches)
 		# skimage.io.imshow(patches[0].astype(np.uint8))
 		# skimage.io.show()
-		print("patches,shape->>",patches[0].shape)
 		# img = resize(
 		# 	img,
 		# 	(IMG_HEIGHT, IMG_WIDTH),
@@ -30,9 +29,11 @@ class restored_model(object):
 		# 	preserve_range=True
 		# )
 		generated_mask=self.model_saver.predict(patches)
+		ll = list()
+		ll.append(generated_mask)
 		# skimage.io.imshow(generated_mask[0])
 		# skimage.io.show()
-		return generated_mask
+		return ll
 
 	def close_sess(self):
 		print()
