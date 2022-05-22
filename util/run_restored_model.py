@@ -20,9 +20,18 @@ class restored_model(object):
 	def run_sess(self, patches):
 		# generated_mask=self.sess.run([self.c_mask_out], feed_dict)
 		# print("patches->>",patches)
-		# skimage.io.imshow(patches[0])
+		# skimage.io.imshow(patches[0].astype(np.uint8))
 		# skimage.io.show()
+		print("patches,shape->>",patches[0].shape)
+		# img = resize(
+		# 	img,
+		# 	(IMG_HEIGHT, IMG_WIDTH),
+		# 	mode='constant',
+		# 	preserve_range=True
+		# )
 		generated_mask=self.model_saver.predict(patches)
+		# skimage.io.imshow(generated_mask[0])
+		# skimage.io.show()
 		return generated_mask
 
 	def close_sess(self):

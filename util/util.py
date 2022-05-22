@@ -111,7 +111,7 @@ def preprocess(input_image, patch_size, stride, file_path):
 	# shape[1] =图像的宽
 	# shape[2] = 图像的图像通道数量
 	shape=input_image.shape
-	patch_list=image2patch(input_image.astype(np.float32)/255.0, patch_size, stride)
+	patch_list=image2patch(input_image, patch_size, stride)
 	num_group=math.ceil(len(patch_list)/g_size)
 	batch_group=list()
 	for i in range(num_group):
@@ -181,7 +181,7 @@ def center_edge(mask, image):
 	comb_mask=np.clip(comb_mask, a_min=0, a_max=1)
 	check_image=np.copy(image)
 	comb_mask*=255
-	check_image[:,:]=np.maximum(check_image[:,:], comb_mask)
+	check_image[:,:,1]=np.maximum(check_image[:,:,1], comb_mask)
 	return check_image.astype(np.uint8), comb_mask.astype(np.uint8)
 
 

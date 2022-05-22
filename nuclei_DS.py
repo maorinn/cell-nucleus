@@ -11,7 +11,7 @@ from util import*
 import matplotlib.pyplot as plt
 
 def process(data_folder, model_name, format):
-	patch_size=256
+	patch_size=128
 	stride=16
 	file_path=os.path.join(os.getcwd(), data_folder)
 	name_list=os.listdir(file_path) # 获取文件/目录名称列表
@@ -32,7 +32,7 @@ def process(data_folder, model_name, format):
 			continue
 		# result_path=os.path.join(temp_path, 'mask.png')
 		print("os.path.join(temp_path, temp_name+format",os.path.join(temp_path, temp_name+format))
-		temp_image=cv2.imread(os.path.join(temp_path, temp_name+format),0) # 读取样本图片
+		temp_image=cv2.imread(os.path.join(temp_path, temp_name+format)) # 读取样本图片
 		if temp_image is None:
 			raise AssertionError(temp_path, ' not found')
 		batch_group, shape=preprocess(temp_image, patch_size, stride, temp_path) 
@@ -67,7 +67,7 @@ def process(data_folder, model_name, format):
 
 def main():
 	data_folder='data' # 样本数据目录
-	model_name='unet_membrane.hdf5' # 模型文件
+	model_name='nuclear_model.h5' # 模型文件
 	format='.png' # 图片后缀
 	process(data_folder, model_name, format) # 运行主要程序
 
