@@ -4,6 +4,7 @@ restored a model and run session
 '''
 import tensorflow.compat.v1 as tf
 import numpy as np 
+import skimage
 
 class restored_model(object):
 
@@ -21,7 +22,11 @@ class restored_model(object):
 
 	def run_sess(self, patches):
 		feed_dict={self.sample_in: patches}
+		skimage.io.imshow(patches[0])
+		skimage.io.show()
 		generated_mask=self.sess.run([self.c_mask_out], feed_dict)
+		skimage.io.imshow(generated_mask[0][0])
+		skimage.io.show()
 		return generated_mask
 
 	def close_sess(self):
