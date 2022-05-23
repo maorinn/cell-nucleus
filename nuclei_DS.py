@@ -44,7 +44,7 @@ def process(data_folder, model_name, format):
 		c_mask[c_mask>=thr]=1
 		print("c_mask->",c_mask)
 		# 生成带细胞轮廓的图片 center_edge_mask 彩色，gray_map 黑白
-		center_edge_mask, gray_map=center_edge(c_mask, temp_image)
+		center_edge_mask, gray_map=center_edge(c_mask, temp_image,temp_name)
 		skimage.io.imshow(center_edge_mask)
 		skimage.io.show()
 		skimage.io.imshow(gray_map)

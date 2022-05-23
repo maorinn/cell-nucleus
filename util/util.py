@@ -136,16 +136,18 @@ def center_point(mask):
 	prop=regionprops(individual_mask)
 	for cordinates in prop:
 		temp_center=cordinates.centroid # 中心坐标
-		print("temp_center",temp_center)
+		# print("temp_center",temp_center)
 		if not math.isnan(temp_center[0]) and not math.isnan(temp_center[1]):
 			temp_mask=np.zeros([v,h])
 			temp_mask[int(temp_center[0]), int(temp_center[1])]=1
+			# skimage.io.imshow(center_mask)
+			# skimage.io.show()
 			center_mask+=dilation(temp_mask, square(2))
 	# skimage.io.imshow(center_mask)
 	# skimage.io.show()
 	return np.clip(center_mask, a_min=0, a_max=1).astype(np.uint8)
 
-def draw_individual_edge(mask,image):
+def draw_individual_edge(mask,image,temp_name):
 	v,h=mask.shape
 	cellCount = 0
 	edge=np.zeros([v,h])
@@ -156,10 +158,20 @@ def draw_individual_edge(mask,image):
 		temp_mask=np.copy(individual_mask)
 		temp_mask[temp_mask!=index]=0
 		temp_mask[temp_mask==index]=1
-		temp_mask=dilation(temp_mask, square(3))
-		temp_edge=cv2.Canny(temp_mask.astype(np.uint8), 2,5)/255 # 边缘轮廓图
+		# print(temp_mask)
+		temp_mask = temp_mask * 255
+		temp_mask = temp_mask.astype(np.uint8)
+		print("temp_mask.shape",temp_mask.dtype)
+		cv2.imwrite(os.path.join("data/"+temp_name+"/mask", str(index)+".png"), temp_mask)
+
+		temp_mask=dilation(temp_mask, square(3)) 
+	
+		temp_edge=cv2.Canny(temp_mask.astype(np.uint8), 2,5) # 边缘轮廓图
+
+
 		temp_edge_copy = np.copy(temp_edge)
 		image_copy = np.copy(image)
+
 		r =  tailor_cell(temp_edge_copy,image_copy)
 		edge+=temp_edge
 		if r is None:
@@ -173,9 +185,9 @@ def draw_individual_edge(mask,image):
 	return np.clip(edge, a_min=0, a_max=1).astype(np.uint8)
 
 # 
-def center_edge(mask, image):
+def center_edge(mask, image,temp_name):
 	center_map=center_point(mask)
-	edge_map=draw_individual_edge(mask,image)
+	edge_map=draw_individual_edge(mask,image,temp_name)
 	comb_mask=center_map+edge_map
 	comb_mask=np.clip(comb_mask, a_min=0, a_max=1)
 	check_image=np.copy(image)
@@ -199,7 +211,7 @@ def tailor_cell(img,sampleImage):
 
 	max_id = areas.index(max(areas))
 	area = cv2.contourArea(contours[max_id])
-	print("面积->",area)
+	# print("面积->",area)
 	if area<150:
 		return
 	elif area >1000:
@@ -229,7 +241,7 @@ def tailor_cell(img,sampleImage):
 	# 剪裁的图片
 	target = sampleImage[int(pts2[2][1]):int(pts2[1][1]),int(pts2[2][0]):int(pts2[3][0])]
 	imageVar = getImageVar(target)
-	print("图片明暗度->",imageVar)
+	# print("图片明暗度->",imageVar)
 	# skimage.io.imshow(img1)
 	# skimage.io.show()
 	# skimage.io.imshow(target)
