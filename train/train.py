@@ -19,8 +19,8 @@ warnings.filterwarnings('ignore')
 # %tensorboard --logdir logs
 
 
-TRAIN_PATH = "data/data-science-bowl-2018/stage1_train/"
-TEST_PATH = "data/data-science-bowl-2018/stage1_test/"
+TRAIN_PATH = "data/nuclear/stage1_train/"
+TEST_PATH = "data/nuclear/stage1_test/"
 IMG_WIDTH = 128
 IMG_HEIGHT = 128
 IMG_CHANNELS = 3
@@ -37,7 +37,15 @@ Y_train = np.zeros((len(train_ids), IMG_HEIGHT, IMG_WIDTH, 1), dtype=np.bool)
 for n, id_ in tqdm(enumerate(train_ids), total=len(train_ids)):
 
     path = TRAIN_PATH + id_
-    img = imread(path + '/images/' + id_ + '.png')[:, :, :IMG_CHANNELS]
+    print(path + '/images/' + id_ + '.png')
+
+    img = cv2.imread(path + '/images/' + id_ + '.png')
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    img2 = np.zeros_like(img)
+    img2[:,:,0] = gray
+    img2[:,:,1] = gray
+    img2[:,:,2] = gray
+    img = img2[:, :, :IMG_CHANNELS]
     img = resize(
         img, (IMG_HEIGHT, IMG_WIDTH),
         mode='constant',
@@ -76,6 +84,7 @@ X_test = np.zeros(
 sizes_test = []
 for n, id_ in tqdm(enumerate(test_ids), total=len(test_ids)):
     path = TEST_PATH + id_
+    print(3333,path + '/images/' + id_ + '.png')
     img = cv2.imread(path + '/images/' + id_ + '.png')
     print("patches,shape->>", img.shape)
     sizes_test.append([img.shape[0], img.shape[1]])
